@@ -15,6 +15,7 @@ let myVal = addOrConcat(2, 2, 'concat');
 let newVal = addOrConcat(2, 2, 'add');
 console.log(myVal, newVal);
 console.log(typeof newVal);
+//TS Code
 //Assertions are mostly useful when working with DOM model
 //This way we can assert the specific type of image Element
 const img = document.querySelector('img');
