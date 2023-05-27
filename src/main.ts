@@ -1,78 +1,42 @@
+type One = string
+type Two = string | number
+type Three = 'hello'
 
-//Type alias
+//convert to more or less specfic
+let a: One = 'hello'
+let b = a as Two  //less specific type value
+let c = a as Three //more sprcific type value
 
-type StringOrNumber = string | number;
+//Example for Type Assertions
 
-type stringOrNumberArray = (StringOrNumber)[]
-
-
-type Guitarist = {
-    name: string,
-    active: boolean, 
-    albums : stringOrNumberArray
-}
-
-type UserId = StringOrNumber  //This same cannot be done with interface
-
-//Literal type
-let myName: 'Rohan'
-
-let username: 'Rohan' | 'user 1' | 'user 2'
-
-username = 'Rohan'
-
-//functions
-const add = (a:number, b:number):StringOrNumber => {
-    return a+b
-}
-
-console.log(add(2, 5))
-
-
-const logMsg = (message: any) => {
-    console.log(message)
-}
-
-//to use type with functions we can define function before hand
-type mathFuntions = (c: number, d: number) => number
-//interface method as well
-interface mathFuntionsInterface  {
-    (a: number,
-    b:number):number
-}
-
-//so now if we have to define same function add as above we can simply use this
-const add2: mathFuntions = (a, b) => {
-    return a+b
-}
-
-console.log(add2(23, 5))
-
-
-//optinal parameter
-
-const addAll= (a: number, b: number, c?: number):number => {
-    if(typeof c !== 'undefined') {
-        return a+b+c
+const addOrConcat = (a: number, b: number, c: 'add' | 'concat'):number | string => {
+    if (c === 'add') {
+        return a+b
     }
-    return a+b
+    return '' + a+b
 }
 
-//Rest parametet
-const total = (...nums: number[]): number => {
-    return nums.reduce((prev,curr)=> prev+curr)
-}
+//here we use assertion to assert a certain type 
+let myVal: string = addOrConcat(2, 2, 'concat') as string
+let newVal:number = addOrConcat(2,2,'add') as number
+
+console.log(myVal, newVal)
+console.log(typeof newVal)
 
 
-//NEVER
+//Assertions are mostly useful when working with DOM model
 
-const createError = (msg: string) => {
-    throw new Error(msg)
-}
+//This way we can assert the specific type of image Element
+const img = document.querySelector('img') as HTMLImageElement
+// const newImg = document.getElementById('#img')
+const newImg = document.getElementById('#img') as HTMLImageElement  //if we ! to this , it removes the null prop so it only has HTMLElement assertion to it
 
-const checkNumString=(value: StringOrNumber):string => {
-    if (typeof value === 'string') return 'string'
-    if (typeof value === 'number') return 'number'
-    return createError('This should never happen')
-}
+//we can also use angle bracket before img to assert its type
+const nextImg = <HTMLImageElement> document.getElementById('#New')   //but this will not work in TSX file for react
+
+
+//since img is HTMLImageElement it has access to certain properties that normal HTML element does not have - ex
+
+img.src   //since its an image element , it knows that it has src prop
+newImg.src  //since ts conciders it an HTML element , its not sure of its src property
 
